@@ -8,28 +8,32 @@ public class SpaceshipController : MonoBehaviour
     Rigidbody spaceShipRB;
 
     //inputs 
-    float verticalMovement;
-    float horizontalMovement;
-    float mouseInputX;
-    float mouseInputY;
-    float rollInput;
+     float verticalMovement;
+     float horizontalMovement;
+     float mouseInputX;
+     float mouseInputY;
+     float rollInput;
 
-    //Speeds
-    [SerializeField]
-    float speedMult = 1;
-    [SerializeField]
-    float sppedMultAng = 0.5f;
-    [SerializeField]
-    float speedRollMultAngle = 0.05f;
+    //Speeds variables
+    public float speedMult = 1;
+    public float sppedMultAng = 0.5f;
+    public float speedRollMultAngle = 0.05f;
+    public float speedRollVerticalMulstAngle = 0.1f;
 
+    /**
+    * Function Start
+    * Locks the cursor to the center of the screen
+    */
     void Start(){
         Cursor.lockState = CursorLockMode.Locked;
         spaceShipRB = GetComponent<Rigidbody>();
 
-        //ignore gravity
-        spaceShipRB.useGravity = false;
     }
 
+    /**
+    * Function Update
+    * Gets the inputs from the player
+    */
     void Update(){
         verticalMovement = Input.GetAxis("Vertical");
         horizontalMovement = Input.GetAxis("Horizontal");
@@ -37,15 +41,21 @@ public class SpaceshipController : MonoBehaviour
 
         mouseInputX = Input.GetAxis("Mouse X");
         mouseInputY = Input.GetAxis("Mouse Y");
+
+        
     }
 
+    /**
+    * Function FixedUpdate
+    * Adds the forces of movement to the spaceship
+    */
     void FixedUpdate(){
         spaceShipRB.AddForce(spaceShipRB.transform.TransformDirection(Vector3.forward) * verticalMovement * speedMult, ForceMode.VelocityChange);
 
         spaceShipRB.AddForce(spaceShipRB.transform.TransformDirection(Vector3.right) * horizontalMovement * speedMult, ForceMode.VelocityChange);
 
-        spaceShipRB.AddTorque(spaceShipRB.transform.right * speedRollMultAngle * mouseInputY * -1, ForceMode.VelocityChange);
-        spaceShipRB.AddTorque(spaceShipRB.transform.right * speedRollMultAngle * mouseInputX, ForceMode.VelocityChange);
+        spaceShipRB.AddTorque(spaceShipRB.transform.right * speedRollVerticalMulstAngle * mouseInputY * -1, ForceMode.VelocityChange);
+        spaceShipRB.AddTorque(spaceShipRB.transform.right * speedRollVerticalMulstAngle * mouseInputX, ForceMode.VelocityChange);
 
         spaceShipRB.AddTorque(spaceShipRB.transform.forward * speedRollMultAngle * rollInput, ForceMode.VelocityChange);
     }
